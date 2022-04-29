@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [advise, setAdvise] = useState([]);
+  let componentDidMount = true;
+
+  const fetchData = () => {
+    return fetch("https://api.adviceslip.com/advice")
+      .then((response) => response.json())
+      .then((result) => setAdvise(result.slip));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="card">
+        <h2>ADVICE #{advise.id}</h2>
+        <p>"{advise.advice}"</p>
+        <div className="line-row">
+          <img src="./pattern-divider-desktop.svg" alt="" />
+        </div>
+        <button onClick={()=>window.location.reload()}>
+          <img src="./icon-dice.svg" alt="" />
+        </button>
+      </div>
     </div>
   );
 }
